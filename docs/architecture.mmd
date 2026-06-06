@@ -1,0 +1,55 @@
+flowchart TB
+    subgraph clients["Clients"]
+        Web["Web app"]
+        Mobile["Mobile app"]
+    end
+
+    subgraph frontend["Frontend"]
+        MapUI["Map UI\n(React + Leaflet/Mapbox)"]
+        ReportForm["Report cleanup form"]
+        ImpactDash["Community impact dashboard"]
+    end
+
+    subgraph api["API layer"]
+        Gateway["API Gateway"]
+    end
+
+    subgraph services["Backend services"]
+        ReportSvc["Report Service\n(litter & cleanup spots)"]
+        LocationSvc["Location Service\n(zones, geofencing)"]
+        UserSvc["User Service\n(profiles, auth)"]
+        MediaSvc["Media Service\n(photo uploads)"]
+    end
+
+    subgraph data["Data"]
+        PostGIS[("PostgreSQL + PostGIS")]
+        ObjectStore[("Object storage\n(S3-compatible)")]
+    end
+
+    subgraph external["External APIs"]
+        OSM["OpenStreetMap tiles"]
+        Weather["Weather API"]
+        Geocode["Geocoding API"]
+    end
+
+    Web --> MapUI
+    Mobile --> MapUI
+    MapUI --> ReportForm
+    MapUI --> ImpactDash
+    MapUI --> Gateway
+    ReportForm --> Gateway
+    ImpactDash --> Gateway
+
+    Gateway --> ReportSvc
+    Gateway --> LocationSvc
+    Gateway --> UserSvc
+    Gateway --> MediaSvc
+
+    ReportSvc --> PostGIS
+    LocationSvc --> PostGIS
+    UserSvc --> PostGIS
+    MediaSvc --> ObjectStore
+
+    MapUI --> OSM
+    LocationSvc --> Geocode
+    ReportSvc --> Weather
