@@ -21,6 +21,11 @@
   var autoTimer = null;
   var exitTimer = null;
 
+  function t(text) {
+    if (!text) return text;
+    return window.SiteI18n ? window.SiteI18n.t(text) : text;
+  }
+
   function getScene(id) {
     return config.scenes[id] || null;
   }
@@ -286,7 +291,7 @@
       if (fx.click) {
         hasClick = true;
         star.type = "button";
-        star.setAttribute("aria-label", fx.label || "Continue");
+        star.setAttribute("aria-label", t(fx.label || "Continue"));
         star.addEventListener("click", function () {
           goTo(fx.click, true);
         });
@@ -308,6 +313,7 @@
     }
 
     composeEl.innerHTML = window.LOCUS_COMPOSE[scene.compose]();
+    if (window.SiteI18n) window.SiteI18n.refreshDynamic();
     composeEl.hidden = false;
     composeEl.classList.remove("locus-compose--dissolving", "locus-compose--arrow-exit");
     composeEl.querySelectorAll(".locus-thread-exit-wrap--exit").forEach(function (el) {
@@ -445,7 +451,7 @@
       btn.type = "button";
       btn.className = "locus-hotspot";
       btn.setAttribute("data-locus-hotspot", "");
-      btn.setAttribute("aria-label", spot.label || "Continue");
+      btn.setAttribute("aria-label", t(spot.label || "Continue"));
       btn.style.left = spot.x + "%";
       btn.style.top = spot.y + "%";
       btn.style.width = spot.w + "%";
@@ -469,7 +475,7 @@
       var btn = document.createElement("button");
       btn.type = "button";
       btn.className = "locus-choice";
-      btn.textContent = choice.label;
+      btn.textContent = t(choice.label);
       btn.addEventListener("click", function () {
         goTo(choice.next, true);
       });
@@ -510,8 +516,8 @@
     currentId = id;
     root.dataset.scene = id;
 
-    titleEl.textContent = scene.title || "";
-    captionEl.textContent = scene.caption || "";
+    titleEl.textContent = t(scene.title || "");
+    captionEl.textContent = t(scene.caption || "");
 
     if (scene.compose) {
       if (window.LOCUS_REVEAL && !(slideFrame && slideFrame.dataset.locusOutgoing === "1")) {
@@ -533,7 +539,7 @@
       if (slideFrame) slideFrame.hidden = false;
       imageEl.hidden = false;
       imageEl.src = scene.image;
-      imageEl.alt = scene.title || "Locus Chamber slide";
+      imageEl.alt = t(scene.title || "Locus Chamber slide");
       imageWrap.hidden = false;
       imageWrap.classList.remove("locus-stage__media--empty", "locus-stage__media--compose");
       if (!scene.castleDoor) {
@@ -611,4 +617,8 @@
   }
 
   renderScene(config.start, false);
+
+  document.addEventListener("site:langchange", function () {
+    if (currentId) renderScene(currentId, false);
+  });
 })();

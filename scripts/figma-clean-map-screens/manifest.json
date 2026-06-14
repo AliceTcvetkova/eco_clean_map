@@ -1,6 +1,6 @@
 {
-  "name": "Locus Chamber — Mobile Rooms",
-  "id": "locus-chamber-room-screens",
+  "name": "Clean Map - MVP Mobile Screens",
+  "id": "clean-map-mvp-mobile-screens",
   "api": "1.0.0",
   "main": "code.js",
   "editorType": ["figma"],

@@ -1,6 +1,6 @@
 {
-  "name": "Locus Chamber — Mobile Rooms",
-  "id": "locus-chamber-room-screens",
+  "name": "Locus Chamber — Translate My Profile (EN)",
+  "id": "locus-chamber-profile-en",
   "api": "1.0.0",
   "main": "code.js",
   "editorType": ["figma"],

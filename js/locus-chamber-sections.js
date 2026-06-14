@@ -25,5 +25,11 @@
     });
   });
 
+  document.querySelectorAll("[data-locus-section-jump]").forEach(function (link) {
+    link.addEventListener("click", function () {
+      showSection(link.getAttribute("data-locus-section-jump"));
+    });
+  });
+
   showSection("product");
 })();

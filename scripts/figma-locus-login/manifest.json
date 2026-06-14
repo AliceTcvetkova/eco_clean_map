@@ -1,6 +1,6 @@
 {
-  "name": "Locus Chamber — Mobile Rooms",
-  "id": "locus-chamber-room-screens",
+  "name": "Locus Chamber — Redesign Login",
+  "id": "locus-chamber-login-redesign",
   "api": "1.0.0",
   "main": "code.js",
   "editorType": ["figma"],

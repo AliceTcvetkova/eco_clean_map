@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Environmental Development · Alice Tsvetkova</title>
+  <title>Clean Map · Alice Tsvetkova</title>
   <script src="js/site-config.js"></script>
   <script src="js/site-analytics.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,37 +26,109 @@
   <main class="case-detail">
     <a class="case-detail__back" href="index.html#ideas">← Back to personal product vision</a>
     <p class="case-detail__label">Personal Product Vision · Clean Map</p>
-    <h1>Environmental Development</h1>
-    <p>Gamifying real-world good deeds through an interactive game world.</p>
+    <h1>Clean Map</h1>
+    <p>What if we used game mechanics not just to entertain people, but to help them clean up the real world?</p>
+
+    <blockquote>
+      <p>Imagine Pokémon GO, but instead of collecting virtual creatures, people improve real places.</p>
+    </blockquote>
 
     <section>
       <h2>Problem</h2>
-      <!-- content -->
+      <p>Polluted places are visible in everyday life, but the path from noticing a problem to actually solving it is fragmented.</p>
+      <ul>
+        <li>People see trash in parks, forests, riversides, beaches, and abandoned lots, but often do not know where to report it.</li>
+        <li>Cleanup initiatives depend on volunteers, local communities, or municipal services that may not have real-time visibility.</li>
+        <li>There is little immediate motivation for individuals to take action beyond personal responsibility.</li>
+        <li>Sponsors and donors may want to fund environmental work, but lack a transparent way to see specific local impact.</li>
+      </ul>
+      <p>Clean Map turns scattered environmental problems into visible, verifiable, and rewardable cleanup tasks.</p>
     </section>
 
     <section>
-      <h2>Research</h2>
-      <!-- content -->
+      <h2>Concept</h2>
+      <p>Clean Map is a location-based product where users report polluted areas, complete cleanup tasks, and receive recognition or rewards after verification.</p>
+      <p>The core experience is built around a shared city map. Every report becomes a potential task, every task has an estimated reward value, and every completed cleanup can be verified through before-and-after evidence.</p>
+      <h3>Technology Foundation</h3>
+      <ul>
+        <li>Maps and geolocation to show nearby polluted areas and cleanup tasks.</li>
+        <li>Mobile cameras to collect before-and-after photo evidence.</li>
+        <li>AI image recognition to classify pollution level and compare cleanup results.</li>
+        <li>Digital payments to support sponsor-funded rewards.</li>
+      </ul>
     </section>
 
     <section>
-      <h2>Mechanics</h2>
-      <!-- content -->
+      <h2>User Roles</h2>
+      <h3>Reporter</h3>
+      <p>A user notices a polluted area, takes a photo, marks the location on the map, and submits a report. AI verifies the report, estimates the pollution level, and assigns a suggested reward value.</p>
+      <h3>Cleaner</h3>
+      <p>Another user opens the map, sees nearby cleanup tasks, chooses one, cleans the location, and uploads an after photo. If the result is verified, the user receives points, badges, reputation, or a financial reward.</p>
+      <h3>Sponsor</h3>
+      <p>A sponsor, company, donor, or philanthropist browses the same map and funds cleanup efforts in places they care about: a beach, a park near their office, a local river, or a district-level environmental campaign.</p>
     </section>
 
     <section>
       <h2>Game Loop</h2>
-      <!-- content -->
+      <p>The product loop connects real-world action with immediate digital feedback.</p>
+      <ol>
+        <li>A polluted place is photographed and added to the map.</li>
+        <li>AI verifies the report and estimates the severity of pollution.</li>
+        <li>The system creates a cleanup task with a visible reward value.</li>
+        <li>A user accepts the task and cleans the area.</li>
+        <li>The user uploads an after photo from the same location.</li>
+        <li>AI compares before-and-after images and flags uncertain cases for moderation.</li>
+        <li>The user receives points, badges, reputation, or payment.</li>
+      </ol>
+      <p>This creates a simple habit loop: discover a nearby task, improve a real place, get visible proof of impact, and progress in the system.</p>
     </section>
 
     <section>
       <h2>MVP</h2>
-      <!-- content -->
+      <p>The first version should focus on proving that users understand the loop and are willing to report or complete cleanup tasks.</p>
+      <h3>Core Scope</h3>
+      <ul>
+        <li>Interactive map with polluted locations and cleanup tasks.</li>
+        <li>Report creation with photo upload, geolocation, category, and short description.</li>
+        <li>Task cards with distance, estimated difficulty, and reward value.</li>
+        <li>Before-and-after photo upload for completed tasks.</li>
+        <li>Basic AI or manual verification for report quality and cleanup completion.</li>
+        <li>User profile with points, completed tasks, badges, and reputation.</li>
+      </ul>
+      <h3>Validation Questions</h3>
+      <ul>
+        <li>Will users submit reports when they notice polluted locations?</li>
+        <li>Will users complete small cleanup tasks if the action is simple and visible?</li>
+        <li>Which rewards matter more: reputation, badges, social recognition, or money?</li>
+        <li>Will sponsors fund specific cleanup tasks when impact is transparent?</li>
+      </ul>
     </section>
 
     <section>
       <h2>Economy</h2>
-      <!-- content -->
+      <p>The reward system can combine non-financial motivation with sponsor-funded payments.</p>
+      <ul>
+        <li><strong>Reputation points:</strong> a visible measure of real-world contribution.</li>
+        <li><strong>Badges and levels:</strong> recognition for repeated action, local expertise, and team participation.</li>
+        <li><strong>Sponsored rewards:</strong> small payments attached to verified cleanup tasks.</li>
+        <li><strong>Local campaigns:</strong> companies, cities, or communities fund cleanup sprints in specific areas.</li>
+        <li><strong>Impact reports:</strong> sponsors see funded tasks, cleaned locations, photos, and measurable environmental outcomes.</li>
+      </ul>
+      <p>The system should be designed carefully to prevent fraud: duplicate reports, staged photos, low-quality cleanups, and reward farming need AI checks, moderation, and reputation-based limits.</p>
+    </section>
+
+    <section>
+      <h2>Product Demo</h2>
+      <p>The demo video should show one complete story in 45-90 seconds: report a polluted place, turn it into a task, complete the cleanup, verify the result, and receive a reward.</p>
+      <h3>What Needs To Be Prepared</h3>
+      <ul>
+        <li>A clickable prototype or working demo with the main screens: map, report form, task details, cleanup upload, verification result, and profile.</li>
+        <li>Sample map data with several polluted locations and one highlighted cleanup task.</li>
+        <li>Before-and-after photos for a realistic verification moment.</li>
+        <li>A short script that explains the flow from the perspective of the reporter, cleaner, and sponsor.</li>
+        <li>A clean screen recording in MP4 format, ideally 1080p, with notifications and unrelated windows hidden.</li>
+      </ul>
+      <p>Once the recording is ready, it can be added to this page as an embedded product walkthrough.</p>
     </section>
   </main>
 
@@ -64,6 +136,9 @@
     <p>© Alice Tsvetkova · Product Manager</p>
   </footer>
 
+  <script src="js/i18n/dict-ru.js"></script>
+  <script src="js/i18n/dict-ru-attrs.js"></script>
+  <script src="js/site-i18n.js"></script>
   <script src="js/sketch-bg.js"></script>
 </body>
 </html>

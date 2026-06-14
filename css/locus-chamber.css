@@ -2059,6 +2059,192 @@
   max-width: var(--max);
 }
 
+.locus-outline--evolution {
+  max-width: var(--max);
+}
+
+.locus-outline--evolution > h4 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin: 1.75rem 0 0.5rem;
+  color: var(--text);
+}
+
+.locus-outline--evolution > h4:first-of-type {
+  margin-top: 0;
+}
+
+.locus-outline__crosslink {
+  display: inline;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: rgba(113, 112, 255, 0.95);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+}
+
+.locus-outline__crosslink:hover {
+  color: #9b9aff;
+}
+
+.locus-outline-tier-table {
+  width: 100%;
+  margin: 0 0 1.5rem;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.locus-outline-tier-table th,
+.locus-outline-tier-table td {
+  padding: 0.65rem 1rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+
+.locus-outline-tier-table thead th {
+  background: var(--bg-elevated);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+}
+
+.locus-outline-tier-table thead th:last-child {
+  color: rgba(113, 112, 255, 0.95);
+}
+
+.locus-outline-tier-table tbody td {
+  color: var(--text-muted);
+}
+
+.locus-outline-tier-table tbody td:last-child {
+  color: var(--text);
+  background: rgba(113, 112, 255, 0.04);
+}
+
+.locus-outline-tier-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.locus-outline-table-wrap {
+  margin: 0 0 1.5rem;
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+}
+
+.locus-outline-validation-table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.locus-outline-validation-table th,
+.locus-outline-validation-table td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+
+.locus-outline-validation-table thead th {
+  background: var(--bg-elevated);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+}
+
+.locus-outline-validation-table tbody th[scope="row"] {
+  width: 11rem;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  background: rgba(113, 112, 255, 0.05);
+}
+
+.locus-outline-validation-table__stage {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(113, 112, 255, 0.9);
+  margin-bottom: 0.2rem;
+}
+
+.locus-outline-validation-table tbody td {
+  color: var(--text-muted);
+}
+
+.locus-outline-validation-table tbody td strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.locus-outline-validation-table tbody td ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+
+.locus-outline-validation-table tbody td li + li {
+  margin-top: 0.35rem;
+}
+
+.locus-outline-validation-table tbody tr:last-child th,
+.locus-outline-validation-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.locus-outline-feature--sketch img {
+  width: 100%;
+  height: auto;
+}
+
+.locus-outline-visual-placeholder {
+  min-width: 200px;
+}
+
+.locus-outline-visual-placeholder__frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  border: 1px dashed rgba(113, 112, 255, 0.35);
+  background: rgba(113, 112, 255, 0.06);
+  text-align: center;
+}
+
+.locus-outline-visual-placeholder__frame p {
+  margin: 0;
+  color: var(--text-subtle);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+
+.locus-outline-visual-placeholder .locus-outline-feature__caption {
+  margin-top: 0.5rem;
+  padding: 0;
+  background: none;
+  border: none;
+  text-align: right;
+}
+
 .locus-outline-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(110px, 21%);
