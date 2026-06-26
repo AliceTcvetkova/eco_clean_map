@@ -2350,7 +2350,17 @@
 .locus-outline-subsections {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
+}
+
+.locus-outline-sub .locus-outline-feature,
+.locus-outline-sub .locus-outline-video {
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+
+.locus-outline-video--mobile {
+  max-width: 360px;
 }
 
 .locus-outline-sub h5 {

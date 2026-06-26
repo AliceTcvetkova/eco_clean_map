@@ -139,6 +139,8 @@ module.exports = {
   "Cleanup initiatives depend on volunteers, local communities, or municipal services that may not have real-time visibility.":
     "Инициативы по уборке зависят от волонтёров, местных сообществ или муниципальных служб, у которых часто нет актуальной картины в реальном времени.",
   "Clickable prototype.": "Кликабельный прототип.",
+  "Click-through demo of the full mobile flow — login, chambers, memory garden, chronology, room creation, living room, archive, and profile.":
+    "Кликабельное демо полного мобильного сценария — вход, чертоги, сад памяти, хронология, создание комнаты, гостиная, архив и профиль.",
   "Cloud storage (corporate segment):": "Облачное хранилище (корпоративный сегмент):",
   "Competitor analysis": "Анализ конкурентов",
   "Compliance with legal requirements": "Соответствие правовым требованиям",
@@ -380,6 +382,8 @@ module.exports = {
   "Misaligned development processes": "Несогласованные процессы разработки",
   "Mobile cameras to collect before-and-after photo evidence.":
     "Мобильные камеры для сбора фото-доказательств «до» и «после».",
+  "Mobile app demo — Figma screens and live interactions":
+    "Демо мобильного приложения — экраны Figma и живые взаимодействия",
   Model: "Модель",
   "Monetization check": "Проверка монетизации",
   "More than 20 teams involved in the project.": "В проекте участвовало более 20 команд.",

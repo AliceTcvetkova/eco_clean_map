@@ -1,0 +1,36 @@
+{
+  "output": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "screenDurationSec": 1.5,
+    "crossfadeSec": 0.25,
+    "variantCrossfadeSec": 0.55,
+    "background": "#0a0a0a"
+  },
+  "items": [
+    { "type": "frame", "name": "Login", "nodeId": "0:299", "file": "01-login.png" },
+    { "type": "frame", "name": "Your Chambers 1", "nodeId": "2045:917", "file": "02-your-chambers-1.png", "variantGroup": "chambers" },
+    { "type": "frame", "name": "Your Chambers 2", "nodeId": "2081:4330", "file": "03-your-chambers-2.png", "variantGroup": "chambers" },
+    { "type": "frame", "name": "App — Memory Garden (mobile)", "nodeId": "2080:3041", "file": "04-memory-garden.png", "variantGroup": "memory-garden" },
+    { "type": "frame", "name": "App — Memory Garden — Files (mobile)", "nodeId": "2081:3747", "file": "05-memory-garden-files.png", "variantGroup": "memory-garden" },
+    { "type": "frame", "name": "App — Memory Garden — Add file (mobile)", "nodeId": "2081:3786", "file": "06-memory-garden-add-file.png", "variantGroup": "memory-garden" },
+    { "type": "frame", "name": "App — Memory Garden — Phone picker (mobile)", "nodeId": "2081:3825", "file": "07-memory-garden-phone-picker.png", "variantGroup": "memory-garden" },
+    { "type": "video", "name": "IMG_0018", "file": "c:\\Users\\Alice\\Downloads\\Telegram Desktop\\IMG_0018_cropped.mp4", "durationSec": 3 },
+    { "type": "frame", "name": "Chronology", "nodeId": "2080:3376", "file": "09-chronology.png", "variantGroup": "chronology" },
+    { "type": "frame", "name": "App — Chronology — 2025 selected (mobile)", "nodeId": "2081:5085", "file": "10-chronology-2025.png", "variantGroup": "chronology" },
+    { "type": "frame", "name": "App — Chronology — Photos (mobile)", "nodeId": "2081:5086", "file": "11-chronology-photos.png", "variantGroup": "chronology" },
+    { "type": "video", "name": "IMG_0017", "file": "c:\\Users\\Alice\\Downloads\\Telegram Desktop\\IMG_0017_cropped.mp4", "durationSec": 5 },
+    { "type": "frame", "name": "Create room - 1", "nodeId": "2081:3527", "file": "13-create-room-1.png", "variantGroup": "create-room" },
+    { "type": "frame", "name": "Create room - 2", "nodeId": "2081:5308", "file": "14-create-room-2.png", "variantGroup": "create-room" },
+    { "type": "frame", "name": "App — Living Room (mobile)", "nodeId": "2021:403", "file": "15-living-room.png", "variantGroup": "living-room" },
+    { "type": "frame", "name": "App — Living Room — Tap (mobile)", "nodeId": "2083:5367", "file": "16-living-room-tap.png", "variantGroup": "living-room" },
+    { "type": "frame", "name": "App — Living Room — Area (mobile)", "nodeId": "2083:5384", "file": "17-living-room-area.png", "variantGroup": "living-room" },
+    { "type": "frame", "name": "App — Living Room — File type (mobile)", "nodeId": "2083:5409", "file": "18-living-room-file-type.png", "variantGroup": "living-room" },
+    { "type": "frame", "name": "App — Living Room — Upload (mobile)", "nodeId": "2083:5458", "file": "19-living-room-upload.png", "variantGroup": "living-room" },
+    { "type": "frame", "name": "Archive - 1", "nodeId": "2086:5782", "file": "20-archive-1.png", "variantGroup": "archive" },
+    { "type": "frame", "name": "Archive - 2", "nodeId": "2086:5926", "file": "21-archive-2.png", "variantGroup": "archive" },
+    { "type": "frame", "name": "Archive - 3", "nodeId": "2088:5973", "file": "22-archive-3.png", "variantGroup": "archive" },
+    { "type": "frame", "name": "Profile", "nodeId": "2086:5833", "file": "23-profile.png" }
+  ]
+}

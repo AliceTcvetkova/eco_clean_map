@@ -25,6 +25,7 @@ window.SITE_I18N_RU_ATTRS = {
   "Living room": "Гостиная",
   "Locus Chamber sections": "Разделы Locus Chamber",
   "Locus Chamber · Alice Tsvetkova": "Locus Chamber · Alice Tsvetkova",
+  "Locus Chamber mobile app demo": "Демо мобильного приложения Locus Chamber",
   "Lynx on a stump": "Рысь на пне",
   "MVP room concept — classic library": "Концепция комнаты MVP — классическая библиотека",
   "MVP room concept — coastal study with fisheye view": "Концепция комнаты MVP — прибрежный кабинет с эффектом «рыбий глаз»",

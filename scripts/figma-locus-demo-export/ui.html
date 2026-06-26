@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { font: 13px/1.45 Inter, sans-serif; margin: 16px; color: #111; }
+    button { padding: 10px 14px; border: 0; border-radius: 8px; background: #111; color: #fff; cursor: pointer; }
+    button:disabled { opacity: 0.5; cursor: default; }
+    #log { margin-top: 12px; white-space: pre-wrap; font-size: 12px; color: #444; }
+  </style>
+</head>
+<body>
+  <p>Exports 21 demo frames as PNG @2x. Save all files into:</p>
+  <p><code>assets/locus-chamber/demo-export/</code></p>
+  <button id="run">Export frames</button>
+  <div id="log"></div>
+  <script>
+    const log = document.getElementById("log");
+    const btn = document.getElementById("run");
+    let pending = 0;
+
+    function write(msg) {
+      log.textContent += msg + "\n";
+    }
+
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+      if (!msg) return;
+
+      if (msg.type === "log") {
+        write(msg.text);
+        return;
+      }
+
+      if (msg.type === "start") {
+        pending = msg.count;
+        return;
+      }
+
+      if (msg.type === "file") {
+        const bytes = new Uint8Array(msg.bytes);
+        const blob = new Blob([bytes], { type: "image/png" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = msg.fileName;
+        a.click();
+        URL.revokeObjectURL(a.href);
+        pending -= 1;
+        if (pending <= 0) {
+          btn.disabled = false;
+          write("Done. Move downloads into demo-export/, then run assemble-locus-demo.mjs");
+        }
+      }
+
+      if (msg.type === "error") {
+        btn.disabled = false;
+        write("Error: " + msg.text);
+      }
+    };
+
+    btn.onclick = () => {
+      btn.disabled = true;
+      log.textContent = "";
+      pending = 0;
+      parent.postMessage({ pluginMessage: { type: "export" } }, "*");
+    };
+  </script>
+</body>
+</html>

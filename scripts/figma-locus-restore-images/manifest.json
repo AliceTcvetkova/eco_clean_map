@@ -1,0 +1,8 @@
+{
+  "name": "Locus Chamber — Restore Room Images",
+  "id": "locus-chamber-restore-images",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["figma"],
+  "documentAccess": "dynamic-page"
+}
