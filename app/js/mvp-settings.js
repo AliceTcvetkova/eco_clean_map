@@ -3,6 +3,8 @@ export const MVP = {
   installUrl: "https://alicetcvetkova.github.io/eco_clean_map/app/",
   pilotCity: "Moscow",
   pilotCityRu: "Москва",
+  mapCenter: { lat: 55.7558, lng: 37.6173 },
+  mapZoom: 12,
   rewardPoints: 240,
   auth: "username_password",
   locales: ["en", "ru"],

@@ -1,11 +1,16 @@
-const CACHE = "clean-map-v2";
+const CACHE = "clean-map-v3";
 const ASSETS = [
   "./",
   "./index.html",
   "./css/app.css",
   "./js/app.js",
   "./js/data.js",
+  "./js/figma.js",
   "./js/mvp-settings.js",
+  "./js/supabase-client.js",
+  "./js/supabase-config.js",
+  "./js/tasks-api.js",
+  "./js/leaflet-map.js",
   "./js/figma-tokens.json",
   "./manifest.webmanifest",
   "./icons/icon.svg",

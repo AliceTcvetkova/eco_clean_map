@@ -890,6 +890,57 @@ a {
   white-space: nowrap;
 }
 
+.map-wrap {
+  position: relative;
+}
+
+.map-wrap .search-field {
+  position: absolute;
+}
+
+.leaflet-map {
+  height: 230px;
+  width: 100%;
+  border-radius: 32px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  z-index: 1;
+  background: var(--map-bg);
+}
+
+.leaflet-map--tall {
+  height: 420px;
+}
+
+.leaflet-task-icon,
+.leaflet-user-icon {
+  background: none;
+  border: none;
+}
+
+.leaflet-task-icon__dot {
+  display: block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 3px solid var(--paper);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.leaflet-user-icon__dot {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #5b9fd4;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 4px rgba(91, 159, 212, 0.25);
+}
+
+.leaflet-control-attribution {
+  font-size: 9px !important;
+}
+
 .figma-toggle {
   position: absolute;
   top: calc(var(--status-h) + 6px);

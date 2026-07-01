@@ -1,51 +1,40 @@
-export const TASKS = [
+/** Fallback when Supabase is unavailable or SQL not applied yet. */
+export const FALLBACK_ROWS = [
   {
-    id: "riverside",
+    id: "fallback-gorky",
     title: "Riverside plastic waste",
-    distance: "0.8 km",
+    location_name: "Gorky Park, Moscow",
+    lat: 55.731,
+    lng: 37.601,
     severity: "medium",
-    severityLabel: "Medium pollution",
-    reward: 240,
-    badge: "Riverside badge",
-    location: "Northern Park, riverside path",
-    reported: "18 min ago",
+    reward_points: 240,
     category: "Plastic",
-    pinColor: "amber",
-    pinLabel: "Med",
-    x: 72,
-    y: 28
+    created_at: new Date(Date.now() - 18 * 60000).toISOString(),
+    status: "open"
   },
   {
-    id: "park-trash",
+    id: "fallback-patriarch",
     title: "Park bench litter",
-    distance: "1.1 km",
+    location_name: "Patriarch Ponds, Moscow",
+    lat: 55.7642,
+    lng: 37.5917,
     severity: "high",
-    severityLabel: "High pollution",
-    reward: 320,
-    badge: "Park Hero badge",
-    location: "Northern Park, playground",
-    reported: "42 min ago",
+    reward_points: 320,
     category: "Mixed",
-    pinColor: "red",
-    pinLabel: "High",
-    x: 28,
-    y: 22
+    created_at: new Date(Date.now() - 42 * 60000).toISOString(),
+    status: "open"
   },
   {
-    id: "beach-glass",
-    title: "Beach glass cleanup",
-    distance: "1.2 km",
+    id: "fallback-sparrow",
+    title: "Glass near the path",
+    location_name: "Sparrow Hills, Moscow",
+    lat: 55.7103,
+    lng: 37.5593,
     severity: "low",
-    severityLabel: "Low pollution",
-    reward: 180,
-    badge: "Coastal badge",
-    location: "East beach access",
-    reported: "2 hr ago",
+    reward_points: 180,
     category: "Glass",
-    pinColor: "green",
-    pinLabel: "Done",
-    x: 72,
-    y: 56
+    created_at: new Date(Date.now() - 120 * 60000).toISOString(),
+    status: "open"
   }
 ];
 

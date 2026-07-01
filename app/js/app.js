@@ -1,15 +1,20 @@
-import { TASKS, PROFILE, CAMPAIGN, REPORT_CATEGORIES } from "./data.js";
+import { FALLBACK_ROWS, PROFILE, CAMPAIGN, REPORT_CATEGORIES } from "./data.js";
 import { loadFigmaTokens, applyFigmaTokens, figmaScreenAsset } from "./figma.js";
-import { DEV_MODE, t } from "./mvp-settings.js";
+import { DEV_MODE, MVP, appLocale, t } from "./mvp-settings.js";
+import { getSupabase } from "./supabase-client.js";
+import { loadTasksFromSupabase, normalizeTask, requestUserLocation, sortByDistance } from "./tasks-api.js";
+import { destroyMaps, mountLeafletMap } from "./leaflet-map.js";
 
 const state = {
   screen: "onboarding",
   tab: "Map",
-  selectedTaskId: TASKS[0].id,
+  selectedTaskId: null,
   reportCategory: REPORT_CATEGORIES[0],
   acceptedTaskId: null,
   onboardingDone: localStorage.getItem("cleanMapOnboarded") === "1",
-  figmaOverlay: localStorage.getItem("cleanMapFigmaOverlay") === "1"
+  figmaOverlay: localStorage.getItem("cleanMapFigmaOverlay") === "1",
+  userLocation: null,
+  tasks: []
 };
 
 let figmaData = null;
@@ -31,8 +36,30 @@ const installBanner = document.getElementById("install-banner");
 let deferredPrompt = null;
 let toastTimer = null;
 
+function getTasks() {
+  return state.tasks;
+}
+
 function selectedTask() {
-  return TASKS.find((task) => task.id === state.selectedTaskId) || TASKS[0];
+  const tasks = getTasks();
+  return tasks.find((task) => task.id === state.selectedTaskId) || tasks[0] || null;
+}
+
+function mapSubtitle() {
+  const tasks = getTasks();
+  const locale = appLocale();
+  if (!tasks.length) {
+    return locale === "ru" ? `Нет задач · ${MVP.pilotCityRu}` : `No tasks · ${MVP.pilotCity}`;
+  }
+  const nearest = tasks[0];
+  if (locale === "ru") {
+    return nearest.distanceKm != null
+      ? `${tasks.length} задач · ближайшая ${nearest.distance}`
+      : `${tasks.length} задач · ${MVP.pilotCityRu}`;
+  }
+  return nearest.distanceKm != null
+    ? `${tasks.length} tasks · nearest ${nearest.distance}`
+    : `${tasks.length} tasks in ${MVP.pilotCity}`;
 }
 
 function showToast(message) {
@@ -42,29 +69,35 @@ function showToast(message) {
   toastTimer = setTimeout(() => toastEl.classList.remove("is-visible"), 2200);
 }
 
-function mapMarkup(options = {}) {
-  const tall = options.tall ? " map-canvas--tall" : "";
-  const pins = (options.pins || TASKS).map((task) => `
-    <button type="button" class="map-pin map-pin--${task.pinColor}" data-task-id="${task.id}" style="left:${task.x}%;top:${task.y}%" aria-label="${task.title}">
-      <span class="map-pin__glow"></span>
-      <span class="map-pin__dot"></span>
-      <span class="map-pin__label">${task.pinLabel}</span>
-    </button>
-  `).join("");
-
+function heroMapMarkup() {
   return `
-    <div class="map-canvas${tall}">
+    <div class="map-canvas">
       <div class="map-canvas__park" style="width:190px;height:170px;left:10px;top:30px"></div>
       <div class="map-canvas__forest" style="width:130px;height:100px;left:40px;top:210px"></div>
       <div class="map-canvas__river" style="width:96px;height:380px;right:-10px;top:-40px"></div>
-      <div class="map-canvas__road" style="width:318px;left:12px;top:76px;transform:rotate(4deg)"></div>
-      <div class="map-canvas__road" style="width:300px;left:20px;top:200px;transform:rotate(-8deg)"></div>
-      <div class="map-canvas__road" style="width:160px;left:108px;top:0;transform:rotate(72deg)"></div>
-      <div class="map-canvas__road map-canvas__road--thin" style="width:350px;left:0;top:260px"></div>
-      ${options.search ? `<div class="search-field">Search park, river, beach...</div>` : ""}
-      ${pins}
     </div>
   `;
+}
+
+function mapContainer(options = {}) {
+  const tall = options.tall ? " leaflet-map--tall" : "";
+  const fit = options.fit ? "1" : "0";
+  return `<div class="leaflet-map${tall}" data-leaflet-map data-map-fit="${fit}"></div>`;
+}
+
+function mountActiveMaps() {
+  destroyMaps();
+  const mapEl = phone.querySelector("[data-leaflet-map]");
+  if (!mapEl) return;
+
+  const task = selectedTask();
+  mountLeafletMap(mapEl, {
+    tasks: getTasks(),
+    userLocation: state.userLocation,
+    fitTasks: mapEl.dataset.mapFit === "1",
+    zoom: state.screen === "task" && task ? 15 : MVP.mapZoom,
+    onTaskSelect: (taskId) => navigate("task", { taskId })
+  });
 }
 
 function renderHeader(meta) {
@@ -103,7 +136,7 @@ function renderOnboarding() {
       <div class="screen__body">
         <div class="hero">
           <div class="hero__ring"></div>
-          <div class="hero__map">${mapMarkup({ pins: [TASKS[0], TASKS[1], TASKS[2]] })}</div>
+          <div class="hero__map">${heroMapMarkup()}</div>
         </div>
         <div class="hero-copy">
           <h2>Find polluted places. Clean them. Get rewarded.</h2>
@@ -119,21 +152,28 @@ function renderOnboarding() {
 
 function renderMap() {
   const task = selectedTask();
+  const locale = appLocale();
   return `
     <section class="screen is-active" data-screen="map">
       <div class="status-bar"><span>9:41</span><div class="status-bar__icons"><span class="status-bar__icon"></span><span class="status-bar__icon"></span><span class="status-bar__icon status-bar__icon--battery"></span></div></div>
-      ${renderHeader(screens.map)}
+      ${renderHeader({ ...screens.map, subtitle: mapSubtitle() })}
       <div class="screen__body screen__body--flush">
-        <div style="padding:0 20px">${mapMarkup({ tall: true, search: true })}</div>
-        <div class="sheet card">
-          <p class="card__label">Nearest cleanup</p>
-          <h2 class="card__title">${task.title}</h2>
-          <p class="card__meta">${task.distance} away · ${task.severity} pollution · ${task.reward} pts</p>
-          <div class="btn-row" style="margin-top:18px">
-            <button type="button" class="btn btn--primary" data-action="open-task">View task</button>
-            <button type="button" class="btn btn--secondary" data-action="go-report">Report new</button>
+        <div style="padding:0 20px">
+          <div class="map-wrap">
+            ${mapContainer({ tall: true, fit: true })}
+            <div class="search-field">${locale === "ru" ? "Парк, река, набережная…" : "Search park, river, beach..."}</div>
           </div>
         </div>
+        ${task ? `
+        <div class="sheet card">
+          <p class="card__label">${locale === "ru" ? "Ближайшая уборка" : "Nearest cleanup"}</p>
+          <h2 class="card__title">${task.title}</h2>
+          <p class="card__meta">${task.distance} · ${task.severity} · ${task.reward} pts</p>
+          <div class="btn-row" style="margin-top:18px">
+            <button type="button" class="btn btn--primary" data-action="open-task">${locale === "ru" ? "Открыть задачу" : "View task"}</button>
+            <button type="button" class="btn btn--secondary" data-action="go-report">${locale === "ru" ? "Сообщить" : "Report new"}</button>
+          </div>
+        </div>` : ""}
       </div>
       ${renderTabBar("Map")}
     </section>
@@ -172,16 +212,17 @@ function renderReport() {
 
 function renderTask() {
   const task = selectedTask();
+  if (!task) return renderMap();
   return `
     <section class="screen is-active" data-screen="task">
       <div class="status-bar"><span>9:41</span><div class="status-bar__icons"><span class="status-bar__icon"></span><span class="status-bar__icon"></span><span class="status-bar__icon status-bar__icon--battery"></span></div></div>
-      ${renderHeader({ ...screens.task, title: task.title.replace(" waste", " cleanup"), subtitle: `Estimated reward: ${task.reward} pts` })}
+      ${renderHeader({ ...screens.task, title: task.title, subtitle: `${task.reward} pts` })}
       <div class="screen__body">
-        ${mapMarkup({ pins: [task] })}
+        ${mapContainer({ fit: false })}
         <div class="card" style="margin-top:16px">
           <p class="card__label severity--${task.severity}">${task.severityLabel}</p>
           <h2 class="card__title">${task.title}</h2>
-          <p class="card__meta">Reported ${task.reported} · ${task.distance} away</p>
+          <p class="card__meta">${task.location} · ${task.distance} · ${task.reported}</p>
           <p class="card__label" style="margin-top:18px">Reward</p>
           <p class="card__title" style="font-size:17px;color:var(--green-dark)">${task.reward} points + ${task.badge}</p>
           <p class="card__meta" style="margin-top:12px">Checklist: bring gloves, collect visible plastic, upload after photo from same location.</p>
@@ -221,6 +262,7 @@ function renderProof() {
 
 function renderVerify() {
   const task = selectedTask();
+  const reward = task ? task.reward : MVP.rewardPoints;
   return `
     <section class="screen is-active" data-screen="verify">
       <div class="status-bar"><span>9:41</span><div class="status-bar__icons"><span class="status-bar__icon"></span><span class="status-bar__icon"></span><span class="status-bar__icon status-bar__icon--battery"></span></div></div>
@@ -232,7 +274,7 @@ function renderVerify() {
         </div>
         <div class="card" style="margin-top:16px">
           <p class="card__label">Reward received</p>
-          <p class="card__title" style="font-size:34px;color:var(--green-dark)">+${task.reward} points</p>
+          <p class="card__title" style="font-size:34px;color:var(--green-dark)">+${reward} points</p>
           <p class="card__meta">New badge: Riverside Cleaner</p>
           <div class="btn-row" style="margin-top:18px">
             <button type="button" class="btn btn--primary" data-action="share">Share impact</button>
@@ -290,7 +332,7 @@ function renderSponsor() {
       <div class="status-bar"><span>9:41</span><div class="status-bar__icons"><span class="status-bar__icon"></span><span class="status-bar__icon"></span><span class="status-bar__icon status-bar__icon--battery"></span></div></div>
       ${renderHeader(screens.sponsor)}
       <div class="screen__body">
-        ${mapMarkup()}
+        ${mapContainer({ fit: true })}
         <div class="card" style="margin-top:16px">
           <p class="card__label">Sponsor campaign</p>
           <h2 class="card__title">${CAMPAIGN.title}</h2>
@@ -346,6 +388,7 @@ function render() {
     ${state.figmaOverlay && figmaSrc ? `<img class="figma-ref" src="${figmaSrc}" alt="Figma reference for ${initial} screen">` : ""}
     ${renderers[initial]()}
   `;
+  requestAnimationFrame(() => mountActiveMaps());
 }
 
 function handleAction(action) {
@@ -361,7 +404,7 @@ function handleAction(action) {
       break;
     case "submit-report":
       showToast("Report submitted · AI estimate ready");
-      state.selectedTaskId = TASKS[0].id;
+      if (getTasks()[0]) state.selectedTaskId = getTasks()[0].id;
       setTimeout(() => navigate("map"), 900);
       break;
     case "accept-task":
@@ -434,11 +477,6 @@ phone.addEventListener("click", (event) => {
     render();
     return;
   }
-
-  const pinEl = event.target.closest("[data-task-id]");
-  if (pinEl) {
-    navigate("task", { taskId: pinEl.dataset.taskId });
-  }
 });
 
 window.addEventListener("beforeinstallprompt", (event) => {
@@ -471,6 +509,20 @@ function setupInstallBanner() {
   document.getElementById("install-dismiss").textContent = t("later");
 }
 
+async function loadTasks() {
+  state.userLocation = await requestUserLocation();
+  try {
+    state.tasks = await loadTasksFromSupabase(getSupabase(), state.userLocation);
+  } catch (_) {
+    state.tasks = sortByDistance(
+      FALLBACK_ROWS.map((row) => normalizeTask(row, state.userLocation))
+    );
+  }
+  if (state.tasks[0] && !state.selectedTaskId) {
+    state.selectedTaskId = state.tasks[0].id;
+  }
+}
+
 async function init() {
   setupInstallBanner();
   try {
@@ -479,6 +531,7 @@ async function init() {
   } catch (_) {
     figmaData = null;
   }
+  await loadTasks();
   if (state.onboardingDone) state.screen = "map";
   render();
 }
