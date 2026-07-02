@@ -1,0 +1,167 @@
+.admin-page {
+  min-height: 100dvh;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: max(16px, var(--safe-top)) 16px max(24px, var(--safe-bottom));
+  background: var(--bg);
+  color: var(--paper);
+}
+
+.admin-page a.back-link {
+  display: inline-block;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--lime);
+}
+
+.admin-header {
+  margin-bottom: 20px;
+}
+
+.admin-header h1 {
+  margin: 0;
+  font-size: 24px;
+  color: var(--paper);
+}
+
+.admin-header p {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: var(--subtitle);
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.admin-tabs button {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 999px;
+  background: rgba(255, 250, 240, 0.12);
+  color: var(--paper);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.admin-tabs button.is-active {
+  background: var(--green);
+  color: var(--white);
+}
+
+.admin-toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.admin-toolbar .btn {
+  flex: 1;
+}
+
+.admin-queue {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.admin-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--subtitle);
+  font-size: 14px;
+}
+
+.admin-card {
+  background: var(--card);
+  color: var(--text);
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: var(--shadow-soft);
+}
+
+.admin-card__meta {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.admin-card__title {
+  margin: 0 0 6px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.admin-card__user {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: var(--green-dark);
+}
+
+.admin-photos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.admin-photos--single {
+  grid-template-columns: 1fr;
+}
+
+.admin-photos figure {
+  margin: 0;
+}
+
+.admin-photos img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 12px;
+  background: var(--card-muted);
+}
+
+.admin-photos figcaption {
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: center;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.admin-actions .btn {
+  flex: 1;
+}
+
+.btn--danger {
+  background: var(--red);
+  color: var(--white);
+}
+
+.admin-login {
+  max-width: 360px;
+  margin: 40px auto 0;
+}
+
+.admin-login .card {
+  margin-top: 0;
+}
+
+.admin-hint {
+  margin-top: 16px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--subtitle);
+}
+
+.admin-hint code {
+  font-size: 11px;
+  color: var(--lime);
+}

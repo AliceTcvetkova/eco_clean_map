@@ -25,7 +25,7 @@ export async function loadProfile(userId) {
   const supabase = getSupabase();
   const { data, error } = await supabase
     .from("profiles")
-    .select("id, display_name, points, cleanups")
+    .select("id, display_name, points, cleanups, is_admin")
     .eq("id", userId)
     .maybeSingle();
   if (error) throw error;
