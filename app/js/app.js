@@ -4,7 +4,7 @@ import { DEV_MODE, MVP, appLocale, t, toggleLocale } from "./mvp-settings.js";
 import { getSupabase } from "./supabase-client.js";
 import { loadTasksFromSupabase, normalizeTask, requestUserLocation, sortByDistance, filterPlayableTasks } from "./tasks-api.js";
 import { destroyMaps, mountLeafletMap } from "./leaflet-map.js";
-import { getSession, loadProfile, signIn, signUp, signOut, formatAuthError, previewLoginEmail } from "./auth.js";
+import { getSession, loadProfile, signIn, signUp, signOut, formatAuthError, requestPasswordReset } from "./auth.js";
 import { createReport, createSubmission } from "./reports-api.js";
 import { loadUserActivity } from "./activity-api.js";
 
@@ -278,37 +278,74 @@ function renderMap() {
 
 function renderAuth() {
   const locale = appLocale();
-  const register = state.authMode === "register";
+  const mode = state.authMode;
+  const register = mode === "register";
+  const forgot = mode === "forgot";
+  const subtitle = forgot
+    ? t("forgotSubtitle")
+    : register
+      ? (locale === "ru" ? "Email, имя и пароль" : "Email, name and password")
+      : (locale === "ru" ? "Email и пароль" : "Email and password");
+
+  const fields = forgot
+    ? `
+        <div class="auth-field">
+          <label for="auth-email">${t("email")}</label>
+          <input id="auth-email" name="email" type="email" autocomplete="email" inputmode="email" required>
+        </div>
+        <button type="button" class="btn btn--primary btn--block" data-action="auth-forgot-submit">${t("sendResetLink")}</button>
+      `
+    : register
+      ? `
+        <div class="auth-field">
+          <label for="auth-email">${t("email")}</label>
+          <input id="auth-email" name="email" type="email" autocomplete="email" inputmode="email" required>
+        </div>
+        <div class="auth-field">
+          <label for="auth-username">${t("name")}</label>
+          <input id="auth-username" name="username" autocomplete="username" autocapitalize="words" required minlength="2" maxlength="32">
+        </div>
+        <div class="auth-field">
+          <label for="auth-password">${t("password")}</label>
+          <input id="auth-password" name="password" type="password" autocomplete="new-password" required minlength="6">
+        </div>
+        <button type="button" class="btn btn--primary btn--block" data-action="auth-submit">${t("signUp")}</button>
+      `
+      : `
+        <div class="auth-field">
+          <label for="auth-email">${t("email")}</label>
+          <input id="auth-email" name="email" type="text" autocomplete="username" inputmode="email" required>
+          <p class="auth-login-hint">${t("loginHint")}</p>
+        </div>
+        <div class="auth-field">
+          <label for="auth-password">${t("password")}</label>
+          <input id="auth-password" name="password" type="password" autocomplete="current-password" required minlength="6">
+        </div>
+        <button type="button" class="btn btn--link" data-action="auth-forgot">${t("forgotPassword")}</button>
+        <button type="button" class="btn btn--primary btn--block" data-action="auth-submit">${t("signIn")}</button>
+      `;
+
   return `
     <section class="screen screen--no-tabs is-active" data-screen="auth">
       ${renderHeader({
         title: "Clean Map",
-        subtitle: register
-          ? (locale === "ru" ? "Создайте аккаунт" : "Create your account")
-          : (locale === "ru" ? "Войдите в аккаунт" : "Sign in to your account"),
+        subtitle: forgot ? t("forgotTitle") : subtitle,
         tab: "Home"
       })}
       <div class="screen__body">
         <div class="card">
           <form class="auth-form" data-auth-form>
-            <div class="auth-field">
-              <label for="auth-username">${t("name")}</label>
-              <input id="auth-username" name="username" autocomplete="username" autocapitalize="off" spellcheck="false" required minlength="2" maxlength="32">
-              <p class="auth-login-hint">${t("loginHint")}</p>
-              <p class="auth-login-preview" data-login-preview aria-live="polite"></p>
-            </div>
-            <div class="auth-field">
-              <label for="auth-password">${t("password")}</label>
-              <input id="auth-password" name="password" type="password" autocomplete="${register ? "new-password" : "current-password"}" required minlength="6">
-            </div>
-            <button type="button" class="btn btn--primary btn--block" data-action="auth-submit">${register ? t("signUp") : t("signIn")}</button>
+            ${fields}
           </form>
-          <p class="auth-toggle">
-            ${register ? (locale === "ru" ? "Уже есть аккаунт?" : "Have an account?") : (locale === "ru" ? "Нет аккаунта?" : "No account?")}
-            <button type="button" data-action="auth-toggle">${register ? t("signIn") : t("signUp")}</button>
-          </p>
-          <button type="button" class="btn btn--secondary btn--block" style="margin-top:12px" data-action="auth-skip">${locale === "ru" ? "Карта без входа" : "Browse map as guest"}</button>
-          <p class="auth-reset-hint">${t("resetHint")}</p>
+          ${forgot ? `
+            <button type="button" class="btn btn--secondary btn--block" style="margin-top:12px" data-action="auth-back">${t("backToSignIn")}</button>
+          ` : `
+            <p class="auth-toggle">
+              ${register ? (locale === "ru" ? "Уже есть аккаунт?" : "Have an account?") : (locale === "ru" ? "Нет аккаунта?" : "No account?")}
+              <button type="button" data-action="auth-toggle">${register ? t("signIn") : t("signUp")}</button>
+            </p>
+            <button type="button" class="btn btn--secondary btn--block" style="margin-top:12px" data-action="auth-skip">${locale === "ru" ? "Карта без входа" : "Browse map as guest"}</button>
+          `}
         </div>
       </div>
     </section>
@@ -579,20 +616,7 @@ function render() {
   requestAnimationFrame(() => {
     mountActiveMaps();
     setupPullRefresh();
-    setupAuthPreview();
   });
-}
-
-function setupAuthPreview() {
-  const input = phone.querySelector("#auth-username");
-  const preview = phone.querySelector("[data-login-preview]");
-  if (!input || !preview) return;
-  const update = () => {
-    const email = previewLoginEmail(input.value);
-    preview.textContent = email ? `${t("loginPreview")}: ${email}` : "";
-  };
-  input.addEventListener("input", update);
-  update();
 }
 
 async function refreshMapData() {
@@ -657,6 +681,17 @@ function handleAction(action) {
       state.authMode = state.authMode === "register" ? "login" : "register";
       render();
       break;
+    case "auth-forgot":
+      state.authMode = "forgot";
+      render();
+      break;
+    case "auth-back":
+      state.authMode = "login";
+      render();
+      break;
+    case "auth-forgot-submit":
+      handleForgotPassword();
+      break;
     case "auth-skip":
       navigate("map");
       break;
@@ -716,17 +751,33 @@ function handleAction(action) {
 async function handleAuthSubmit() {
   const form = phone.querySelector("[data-auth-form]");
   if (!form) return;
-  const username = form.username.value.trim();
-  const password = form.password.value;
+  const password = form.password?.value;
   try {
     if (state.authMode === "register") {
-      await signUp(username, password);
+      await signUp({
+        email: form.email.value,
+        displayName: form.username.value,
+        password
+      });
     } else {
-      await signIn(username, password);
+      await signIn(form.email.value, password);
     }
     await refreshAuth();
     showToast(t("signedIn"));
     navigate(state.authReturn || "map");
+  } catch (err) {
+    showToast(formatAuthError(err));
+  }
+}
+
+async function handleForgotPassword() {
+  const form = phone.querySelector("[data-auth-form]");
+  if (!form?.email) return;
+  try {
+    await requestPasswordReset(form.email.value);
+    showToast(t("resetSent"));
+    state.authMode = "login";
+    render();
   } catch (err) {
     showToast(formatAuthError(err));
   }

@@ -5,7 +5,12 @@ let client = null;
 
 export function getSupabase() {
   if (!client) {
-    client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        detectSessionInUrl: true,
+        persistSession: true
+      }
+    });
   }
   return client;
 }

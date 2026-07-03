@@ -6,7 +6,8 @@ export const MVP = {
   mapCenter: { lat: 55.7558, lng: 37.6173 },
   mapZoom: 12,
   rewardPoints: 240,
-  auth: "username_password",
+  auth: "email_password",
+  resetRedirectUrl: "https://alicetcvetkova.github.io/eco_clean_map/app/reset.html",
   locales: ["en", "ru"],
   defaultLocale: "ru"
 };
@@ -20,6 +21,7 @@ export const STRINGS = {
     signUp: "Create account",
     signOut: "Sign out",
     name: "Name",
+    email: "Email",
     password: "Password",
     needAuth: "Sign in to continue",
     addPhoto: "Tap to add photo",
@@ -59,9 +61,18 @@ export const STRINGS = {
     nearestCleanup: "Nearest cleanup",
     openTask: "View task",
     reportNew: "Report new",
-    loginHint: "Latin username only (a-z, 0-9, _). Example: alice",
-    loginPreview: "Login as",
-    resetHint: "Forgot password? Supabase → Authentication → Users → reset there."
+    loginHint: "Old accounts: latin username still works (alice).",
+    resetHint: "",
+    forgotPassword: "Forgot password?",
+    forgotTitle: "Reset password",
+    forgotSubtitle: "We will email you a reset link",
+    sendResetLink: "Send reset link",
+    resetSent: "Check your email for the reset link",
+    backToSignIn: "Back to sign in",
+    newPassword: "New password",
+    savePassword: "Save new password",
+    passwordUpdated: "Password updated — you can sign in",
+    resetInvalid: "Link expired. Request a new reset from the app."
   },
   ru: {
     installBanner: "Установите Eco Clean Map на главный экран для быстрого доступа.",
@@ -71,6 +82,7 @@ export const STRINGS = {
     signUp: "Создать аккаунт",
     signOut: "Выйти",
     name: "Имя",
+    email: "Email",
     password: "Пароль",
     needAuth: "Войдите, чтобы продолжить",
     addPhoto: "Нажмите, чтобы добавить фото",
@@ -110,9 +122,18 @@ export const STRINGS = {
     nearestCleanup: "Ближайшая уборка",
     openTask: "Открыть задачу",
     reportNew: "Сообщить",
-    loginHint: "Имя латиницей (a-z, 0-9, _). Пример: alice",
-    loginPreview: "Вход как",
-    resetHint: "Забыли пароль? Supabase → Authentication → Users → сбросьте там."
+    loginHint: "Старые аккаунты: можно войти латинским именем (alice).",
+    resetHint: "",
+    forgotPassword: "Забыли пароль?",
+    forgotTitle: "Сброс пароля",
+    forgotSubtitle: "Отправим ссылку на ваш email",
+    sendResetLink: "Отправить ссылку",
+    resetSent: "Проверьте почту — там ссылка для сброса",
+    backToSignIn: "Назад ко входу",
+    newPassword: "Новый пароль",
+    savePassword: "Сохранить пароль",
+    passwordUpdated: "Пароль обновлён — можно войти",
+    resetInvalid: "Ссылка устарела. Запросите сброс снова в приложении."
   }
 };
 

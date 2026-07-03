@@ -1,4 +1,4 @@
-const CACHE = "clean-map-v7";
+const CACHE = "clean-map-v8";
 const ASSETS = [
   "./",
   "./index.html",
@@ -14,6 +14,8 @@ const ASSETS = [
   "./js/photos.js",
   "./js/reports-api.js",
   "./js/activity-api.js",
+  "./reset.html",
+  "./js/reset.js",
   "./js/figma-tokens.json",
   "./manifest.webmanifest",
   "./icons/icon.svg",

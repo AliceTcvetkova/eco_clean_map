@@ -1,0 +1,12 @@
+-- Phase 6: email auth + password reset (Supabase Dashboard steps)
+-- No SQL required. Configure in Dashboard:
+--
+-- 1. Authentication → URL Configuration → Redirect URLs, add:
+--    https://alicetcvetkova.github.io/eco_clean_map/app/reset.html
+--
+-- 2. Authentication → Providers → Email:
+--    - For MVP: turn OFF "Confirm email" (or users must confirm before login)
+--    - Built-in email is free with rate limits; optional: SMTP Settings
+--
+-- 3. Site URL (optional):
+--    https://alicetcvetkova.github.io/eco_clean_map/app/

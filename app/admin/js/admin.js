@@ -1,6 +1,6 @@
-import { getSession, signIn, signOut, formatAuthError, previewLoginEmail } from "../../js/auth.js";
+import { getSession, signIn, signOut, formatAuthError } from "../../js/auth.js";
 import { photoPublicUrl } from "../../js/photos.js";
-import { MVP } from "../../js/mvp-settings.js";
+import { MVP, t } from "../../js/mvp-settings.js";
 import {
   fetchIsAdmin,
   listPending,
@@ -44,7 +44,7 @@ function L(key) {
     reward: "Награда",
     back: "← Приложение",
     loginTitle: "Вход администратора",
-    loginHint: "Тот же логин, что в приложении. Флаг is_admin в Supabase.",
+    loginHint: "Тот же email и пароль, что в приложении.",
     notAdmin: "Нет прав администратора",
     approved: "Одобрено",
     rejected: "Отклонено",
@@ -67,7 +67,7 @@ function L(key) {
     reward: "Reward",
     back: "← App",
     loginTitle: "Admin sign in",
-    loginHint: "Same login as the app. Set is_admin in Supabase.",
+    loginHint: "Same email and password as the app.",
     notAdmin: "Not an admin",
     approved: "Approved",
     rejected: "Rejected",
@@ -103,10 +103,8 @@ function renderLogin() {
     <div class="admin-login card">
       <form class="auth-form" data-login-form>
         <div class="auth-field">
-          <label for="username">${locale() === "ru" ? "Имя" : "Username"}</label>
-          <input id="username" name="username" autocomplete="username" autocapitalize="off" spellcheck="false" required minlength="2">
-          <p class="auth-login-hint">${locale() === "ru" ? "Латиница: alice, ivan_p" : "Latin only: alice, ivan_p"}</p>
-          <p class="auth-login-preview" data-login-preview aria-live="polite"></p>
+          <label for="email">${t("email")}</label>
+          <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required>
         </div>
         <div class="auth-field">
           <label for="password">${locale() === "ru" ? "Пароль" : "Password"}</label>
@@ -117,22 +115,10 @@ function renderLogin() {
       <p class="admin-hint">
         SQL: <code>update profiles set is_admin = true where display_name = 'yourname';</code>
       </p>
-      <p class="admin-hint">${locale() === "ru" ? "Забыли пароль? Supabase → Authentication → Users → Send password recovery / Reset." : "Forgot password? Supabase → Authentication → Users → reset there."}</p>
+      <p class="admin-hint">${locale() === "ru" ? "Сброс пароля — в приложении: «Забыли пароль?»" : "Reset password in the app: Forgot password?"}</p>
     </div>
   `;
   root.querySelector("[data-login-form]").addEventListener("submit", handleLogin);
-  const usernameInput = root.querySelector("#username");
-  const preview = root.querySelector("[data-login-preview]");
-  if (usernameInput && preview) {
-    const update = () => {
-      const email = previewLoginEmail(usernameInput.value);
-      preview.textContent = email
-        ? (locale() === "ru" ? `Вход как: ${email}` : `Login as: ${email}`)
-        : "";
-    };
-    usernameInput.addEventListener("input", update);
-    update();
-  }
 }
 
 function renderReportCard(report) {
@@ -253,7 +239,7 @@ async function handleLogin(event) {
   event.preventDefault();
   const form = event.target;
   try {
-    await signIn(form.username.value.trim(), form.password.value);
+    await signIn(form.email.value, form.password.value);
     state.session = await getSession();
     state.admin = await fetchIsAdmin(state.session.user.id);
     if (!state.admin?.is_admin) {
