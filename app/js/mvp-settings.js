@@ -58,7 +58,10 @@ export const STRINGS = {
     noTasks: "No tasks with photos yet",
     nearestCleanup: "Nearest cleanup",
     openTask: "View task",
-    reportNew: "Report new"
+    reportNew: "Report new",
+    loginHint: "Latin username only (a-z, 0-9, _). Example: alice",
+    loginPreview: "Login as",
+    resetHint: "Forgot password? Supabase → Authentication → Users → reset there."
   },
   ru: {
     installBanner: "Установите Eco Clean Map на главный экран для быстрого доступа.",
@@ -106,7 +109,10 @@ export const STRINGS = {
     noTasks: "Пока нет задач с фото",
     nearestCleanup: "Ближайшая уборка",
     openTask: "Открыть задачу",
-    reportNew: "Сообщить"
+    reportNew: "Сообщить",
+    loginHint: "Имя латиницей (a-z, 0-9, _). Пример: alice",
+    loginPreview: "Вход как",
+    resetHint: "Забыли пароль? Supabase → Authentication → Users → сбросьте там."
   }
 };
 

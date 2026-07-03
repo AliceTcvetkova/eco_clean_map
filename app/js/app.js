@@ -4,7 +4,7 @@ import { DEV_MODE, MVP, appLocale, t, toggleLocale } from "./mvp-settings.js";
 import { getSupabase } from "./supabase-client.js";
 import { loadTasksFromSupabase, normalizeTask, requestUserLocation, sortByDistance, filterPlayableTasks } from "./tasks-api.js";
 import { destroyMaps, mountLeafletMap } from "./leaflet-map.js";
-import { getSession, loadProfile, signIn, signUp, signOut } from "./auth.js";
+import { getSession, loadProfile, signIn, signUp, signOut, formatAuthError, previewLoginEmail } from "./auth.js";
 import { createReport, createSubmission } from "./reports-api.js";
 import { loadUserActivity } from "./activity-api.js";
 
@@ -293,7 +293,9 @@ function renderAuth() {
           <form class="auth-form" data-auth-form>
             <div class="auth-field">
               <label for="auth-username">${t("name")}</label>
-              <input id="auth-username" name="username" autocomplete="username" required minlength="2" maxlength="32">
+              <input id="auth-username" name="username" autocomplete="username" autocapitalize="off" spellcheck="false" required minlength="2" maxlength="32">
+              <p class="auth-login-hint">${t("loginHint")}</p>
+              <p class="auth-login-preview" data-login-preview aria-live="polite"></p>
             </div>
             <div class="auth-field">
               <label for="auth-password">${t("password")}</label>
@@ -306,6 +308,7 @@ function renderAuth() {
             <button type="button" data-action="auth-toggle">${register ? t("signIn") : t("signUp")}</button>
           </p>
           <button type="button" class="btn btn--secondary btn--block" style="margin-top:12px" data-action="auth-skip">${locale === "ru" ? "Карта без входа" : "Browse map as guest"}</button>
+          <p class="auth-reset-hint">${t("resetHint")}</p>
         </div>
       </div>
     </section>
@@ -576,7 +579,20 @@ function render() {
   requestAnimationFrame(() => {
     mountActiveMaps();
     setupPullRefresh();
+    setupAuthPreview();
   });
+}
+
+function setupAuthPreview() {
+  const input = phone.querySelector("#auth-username");
+  const preview = phone.querySelector("[data-login-preview]");
+  if (!input || !preview) return;
+  const update = () => {
+    const email = previewLoginEmail(input.value);
+    preview.textContent = email ? `${t("loginPreview")}: ${email}` : "";
+  };
+  input.addEventListener("input", update);
+  update();
 }
 
 async function refreshMapData() {
@@ -712,7 +728,7 @@ async function handleAuthSubmit() {
     showToast(t("signedIn"));
     navigate(state.authReturn || "map");
   } catch (err) {
-    showToast(err.message || String(err));
+    showToast(formatAuthError(err));
   }
 }
 

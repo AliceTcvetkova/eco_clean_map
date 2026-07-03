@@ -1,4 +1,4 @@
-const CACHE = "clean-map-v6";
+const CACHE = "clean-map-v7";
 const ASSETS = [
   "./",
   "./index.html",

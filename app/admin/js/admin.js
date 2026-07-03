@@ -1,4 +1,4 @@
-import { getSession, signIn, signOut } from "../../js/auth.js";
+import { getSession, signIn, signOut, formatAuthError, previewLoginEmail } from "../../js/auth.js";
 import { photoPublicUrl } from "../../js/photos.js";
 import { MVP } from "../../js/mvp-settings.js";
 import {
@@ -104,7 +104,9 @@ function renderLogin() {
       <form class="auth-form" data-login-form>
         <div class="auth-field">
           <label for="username">${locale() === "ru" ? "Имя" : "Username"}</label>
-          <input id="username" name="username" autocomplete="username" required minlength="2">
+          <input id="username" name="username" autocomplete="username" autocapitalize="off" spellcheck="false" required minlength="2">
+          <p class="auth-login-hint">${locale() === "ru" ? "Латиница: alice, ivan_p" : "Latin only: alice, ivan_p"}</p>
+          <p class="auth-login-preview" data-login-preview aria-live="polite"></p>
         </div>
         <div class="auth-field">
           <label for="password">${locale() === "ru" ? "Пароль" : "Password"}</label>
@@ -115,9 +117,22 @@ function renderLogin() {
       <p class="admin-hint">
         SQL: <code>update profiles set is_admin = true where display_name = 'yourname';</code>
       </p>
+      <p class="admin-hint">${locale() === "ru" ? "Забыли пароль? Supabase → Authentication → Users → Send password recovery / Reset." : "Forgot password? Supabase → Authentication → Users → reset there."}</p>
     </div>
   `;
   root.querySelector("[data-login-form]").addEventListener("submit", handleLogin);
+  const usernameInput = root.querySelector("#username");
+  const preview = root.querySelector("[data-login-preview]");
+  if (usernameInput && preview) {
+    const update = () => {
+      const email = previewLoginEmail(usernameInput.value);
+      preview.textContent = email
+        ? (locale() === "ru" ? `Вход как: ${email}` : `Login as: ${email}`)
+        : "";
+    };
+    usernameInput.addEventListener("input", update);
+    update();
+  }
 }
 
 function renderReportCard(report) {
@@ -250,7 +265,7 @@ async function handleLogin(event) {
     }
     await refreshQueue();
   } catch (err) {
-    showToast(err.message || L("error"));
+    showToast(formatAuthError(err));
   }
 }
 
