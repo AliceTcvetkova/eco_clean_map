@@ -4,5 +4,5 @@
  */
 window.SITE_CONFIG = {
   gaMeasurementId: "G-NSDS7ZM2TE",
-  siteUrl: "https://alicetcvetkova.github.io/eco_clean_map/"
+  siteUrl: "https://alicetcvetkova.github.io/portfolio/"
 };
