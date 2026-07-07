@@ -50,6 +50,7 @@ window.SITE_I18N_RU_ATTRS = {
   "The Road of the Memory Keeper — Locus Chamber product roadmap from research to infinite archive": "Дорога хранителя памяти — дорожная карта Locus Chamber от исследования до бесконечного архива",
   "Tsvetkova Alice — Product Manager. FinTech, EdTech, digital products and worlds.": "Tsvetkova Alice — продакт-менеджер. FinTech, EdTech, цифровые продукты и миры.",
   "Product & Delivery Manager • AI Projects • Eco Clean Map • UX • Case Studies": "Product & Delivery Manager • AI-проекты • Eco Clean Map • UX • кейсы",
+  "Product & Delivery Manager • AI Projects • Eco Clean Map • UX • GameDev • Case Studies from FinTech, EdTech and platform work.": "Product & Delivery Manager • AI-проекты • Eco Clean Map • UX • GameDev • кейсы из FinTech, EdTech и платформенных продуктов.",
   "VK · Alice Tsvetkova": "VK · Alice Tsvetkova",
   "Werewolf in the city": "Оборотень в городе"
 };
