@@ -1,4 +1,4 @@
-const CACHE = "clean-map-v10";
+const CACHE = "clean-map-v11";
 const ASSETS = [
   "./",
   "./index.html",
@@ -9,6 +9,7 @@ const ASSETS = [
   "./js/mvp-settings.js",
   "./js/supabase-client.js",
   "./js/supabase-config.js",
+  "./js/leaflet-map.js",
   "./js/tasks-api.js",
   "./js/auth.js",
   "./js/photos.js",

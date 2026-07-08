@@ -623,7 +623,11 @@ function render() {
       ${renderer()}
     `;
     requestAnimationFrame(() => {
-      mountActiveMaps();
+      try {
+        mountActiveMaps();
+      } catch (err) {
+        console.warn("map mount failed", err);
+      }
       setupPullRefresh();
     });
   } catch (err) {
@@ -988,11 +992,20 @@ async function init() {
     figmaData = null;
   }
 
-  await refreshAuth();
+  try {
+    await Promise.race([
+      refreshAuth(),
+      new Promise((resolve) => setTimeout(resolve, 6000))
+    ]);
+  } catch (_) {}
+
   render();
 
   try {
-    await loadTasks();
+    await Promise.race([
+      loadTasks(),
+      new Promise((resolve) => setTimeout(resolve, 12000))
+    ]);
   } catch (_) {
     state.tasks = filterPlayableTasks(
       sortByDistance(FALLBACK_ROWS.map((row) => normalizeTask(row, state.userLocation)))
