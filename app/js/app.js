@@ -41,14 +41,14 @@ const TAB_LABELS = {
 };
 
 const screens = {
-  onboarding: { title: "Clean Map", subtitle: "Turn polluted places into cleanup quests.", tab: "Home", hideTabs: true },
-  map: { title: "Nearby cleanup tasks", subtitle: "3 tasks within 1.2 km", tab: "Map" },
-  report: { title: "Report a polluted place", subtitle: "Before photo + location", tab: "Report" },
-  task: { title: "Riverside cleanup", subtitle: "Estimated reward: 240 pts", tab: "Tasks" },
-  proof: { title: "Upload cleanup proof", subtitle: "After photo from same spot", tab: "Tasks" },
-  verify: { title: "Cleanup verified", subtitle: "Reward unlocked", tab: "Tasks" },
-  profile: { title: "Your impact", subtitle: "12 cleanups completed", tab: "Profile" },
-  sponsor: { title: "Fund local cleanups", subtitle: "Sponsor visible impact", tab: "Sponsor" }
+  onboarding: { title: "Clean Map", subtitleKey: "screenOnboardingSubtitle", tab: "Home", hideTabs: true },
+  map: { titleKey: "screenMapTitle", subtitleKey: "screenMapSubtitle", tab: "Map" },
+  report: { titleKey: "screenReportTitle", subtitleKey: "screenReportSubtitle", tab: "Report" },
+  task: { titleKey: "screenTaskTitle", subtitleKey: "screenTaskSubtitle", tab: "Tasks" },
+  proof: { titleKey: "screenProofTitle", subtitleKey: "screenProofSubtitle", tab: "Tasks" },
+  verify: { titleKey: "screenVerifyTitle", subtitleKey: "screenVerifySubtitle", tab: "Tasks" },
+  profile: { titleKey: "screenProfileTitle", subtitleKey: "screenProfileSubtitle", tab: "Profile" },
+  sponsor: { titleKey: "screenSponsorTitle", subtitleKey: "screenSponsorSubtitle", tab: "Sponsor" }
 };
 
 const phone = document.getElementById("phone");
@@ -202,12 +202,14 @@ async function loadActivity() {
 function renderHeader(meta) {
   const locale = appLocale();
   const otherLocale = locale === "ru" ? "EN" : "RU";
+  const title = meta.title || t(meta.titleKey);
+  const subtitle = meta.subtitle || t(meta.subtitleKey);
   return `
     <header class="header">
       <div class="header__row">
         <div>
-          <h1 class="header__title">${meta.title}</h1>
-          <p class="header__subtitle">${meta.subtitle}</p>
+          <h1 class="header__title">${title}</h1>
+          <p class="header__subtitle">${subtitle}</p>
         </div>
         <div class="header__actions">
           <button type="button" class="locale-toggle" data-action="toggle-locale" aria-label="Language">${otherLocale}</button>
@@ -242,11 +244,11 @@ function renderOnboarding() {
           <div class="hero__map">${heroMapMarkup()}</div>
         </div>
         <div class="hero-copy">
-          <h2>Find polluted places. Clean them. Get rewarded.</h2>
-          <p>A mobile map that turns real-world cleanup into verified local quests.</p>
+          <h2>${t("onboardingTitle")}</h2>
+          <p>${t("onboardingBody")}</p>
         </div>
         <div class="onboarding-actions">
-          <button type="button" class="btn btn--primary btn--block" data-action="start">Start exploring</button>
+          <button type="button" class="btn btn--primary btn--block" data-action="start">${t("startExploring")}</button>
         </div>
       </div>
     </section>
@@ -404,10 +406,10 @@ function renderTask() {
           <p class="card__label severity--${task.severity}">${task.severityLabel}</p>
           <h2 class="card__title">${task.title}</h2>
           <p class="card__meta">${task.location} · ${task.distance} · ${task.reported}</p>
-          <p class="card__label" style="margin-top:18px">Reward</p>
-          <p class="card__title" style="font-size:17px;color:var(--green-dark)">${task.reward} points + ${task.badge}</p>
-          <p class="card__meta" style="margin-top:12px">Checklist: bring gloves, collect visible plastic, upload after photo from same location.</p>
-          <button type="button" class="btn btn--primary btn--block" style="margin-top:18px" data-action="accept-task">${state.acceptedTaskId === task.id ? "Continue to proof" : "Accept task"}</button>
+          <p class="card__label" style="margin-top:18px">${t("reward")}</p>
+          <p class="card__title" style="font-size:17px;color:var(--green-dark)">${task.reward} ${t("rewardPoints")} + ${task.badge}</p>
+          <p class="card__meta" style="margin-top:12px">${t("taskChecklist")}</p>
+          <button type="button" class="btn btn--primary btn--block" style="margin-top:18px" data-action="accept-task">${state.acceptedTaskId === task.id ? t("continueProof") : t("acceptTask")}</button>
         </div>
       </div>
       ${renderTabBar("Tasks")}
@@ -558,14 +560,14 @@ function renderSponsor() {
       <div class="screen__body">
         ${mapContainer({ fit: true })}
         <div class="card" style="margin-top:16px">
-          <p class="card__label">Sponsor campaign</p>
+          <p class="card__label">${t("sponsorCampaign")}</p>
           <h2 class="card__title">${CAMPAIGN.title}</h2>
           <p class="card__meta">${CAMPAIGN.description}</p>
           <div class="progress">
             <div class="progress__track"><div class="progress__fill" style="width:${progress}%"></div></div>
-            <p class="progress__label">$${CAMPAIGN.funded} funded of $${CAMPAIGN.goal}</p>
+            <p class="progress__label">$${CAMPAIGN.funded} ${t("fundedOf")} $${CAMPAIGN.goal}</p>
           </div>
-          <button type="button" class="btn btn--primary btn--block" style="margin-top:18px" data-action="fund">Fund campaign</button>
+          <button type="button" class="btn btn--primary btn--block" style="margin-top:18px" data-action="fund">${t("fundCampaign")}</button>
         </div>
       </div>
       ${renderTabBar("Sponsor")}
