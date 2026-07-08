@@ -249,6 +249,7 @@ function renderOnboarding() {
 
 function renderMap() {
   const task = selectedTask();
+  const locale = appLocale();
   return `
     <section class="screen is-active" data-screen="map">
       ${renderHeader({ ...screens.map, subtitle: mapSubtitle() })}
@@ -959,8 +960,9 @@ async function init() {
     figmaData = null;
   }
   await refreshAuth();
-  await loadTasks();
   if (state.onboardingDone) state.screen = "map";
+  render();
+  await loadTasks();
   render();
 }
 
